@@ -34,7 +34,7 @@ dependencies = [
 dynamic = ["version"]
 
 [project.optional-dependencies]
-test = []
+test = ["pytest"]
 
 [tool.hatch.version]
 path = "func_adl_local/__init__.py"
@@ -53,3 +53,9 @@ line-length = 99
 
 [tool.isort]
 profile = "black"
+
+[tool.flake8]
+max-line-length = 99
+
+[tool.ruff]
+line-length = 99
