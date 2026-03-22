@@ -40,6 +40,7 @@ class xAODConfig:
     version: str = "latest"
     platform: Union[Platform, str] = "docker"
     ignore_cache: bool = False
+    awk: bool = False
 
     def __post_init__(self):
         if self.release not in _VALID_RELEASES:
@@ -105,7 +106,6 @@ def build_sx_spec(query, ds_name: str, config: xAODConfig):
     image = f"docker://{_DOCKER_IMAGE}:{config.version}"
     sx_platform = _SxPlatform(config.platform.value)
     codegen_name, adaptor = install_sx_local(image, sx_platform)
-    backend_name = "local"
 
     spec = ServiceXSpec(
         Sample=[
@@ -118,7 +118,7 @@ def build_sx_spec(query, ds_name: str, config: xAODConfig):
         ],
     )
 
-    return spec, backend_name, adaptor
+    return spec, adaptor
 
 
 def get_data(
@@ -129,10 +129,12 @@ def get_data(
     """Run a query against a dataset, either locally or remotely."""
     from servicex_local.deliver import deliver as local_deliver
 
-    spec, backend_name, adaptor = build_sx_spec(query, ds_name, config)
+    spec, adaptor = build_sx_spec(query, ds_name, config)
 
     sx_result = local_deliver(
         spec, adaptor=adaptor, ignore_local_cache=config.ignore_cache
     )
 
-    return to_awk(sx_result)["MySample"]
+    if config.awk:
+        return to_awk(sx_result)["MySample"]
+    return sx_result["MySample"]
