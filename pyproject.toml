@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "func_adl_local"
+description = "Run FuncADL queries on local files without ServiceX"
+readme = "README.md"
+authors = [{ name = "Roger Janusiak", email = "rogerjanusiak@gmail.com" }]
+license = { text = "MIT" }
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+    "func_adl>=3.2",
+    "func_adl_uproot",
+    "servicex_local",
+    "func_adl_servicex_xaodr21",
+    "func_adl_servicex_xaodr22",
+    "func_adl_servicex_xaodr25",
+    "jinja2",
+    "servicex_analysis_utils",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = []
+
+[tool.hatch.version]
+path = "func_adl_local/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = ["README.md", "/func_adl_local"]
+
+[tool.hatch.build.targets.wheel]
+include = ["README.md", "/func_adl_local"]
+
+[project.urls]
+Homepage = "https://github.com/RogerJanusiak/func_adl_local"
+
+[tool.black]
+line-length = 99
+
+[tool.isort]
+profile = "black"
